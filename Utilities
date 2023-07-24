@@ -97,6 +97,7 @@
 	local indexCache = {}
 	local namecallCache = {}
 	local lockedCache = {}
+	local remoteCache = {}
 	
 	
 	
@@ -109,7 +110,7 @@
 			local fn = tostring(key) and string.lower(tostring(key)) or ''
 			
 			-- .hook and .sethook
-			if fn == 'hook' or fn == 'sethook' then
+			if fn == 'hook' then
 				return function(property, value, callback)
 					if not indexCache[self] then indexCache[self] = {} end
 				
@@ -123,7 +124,7 @@
 			end
 			
 			-- .unhook and .removehook
-			if fn == 'unhook' or fn == 'removehook' then
+			if fn == 'unhook' then
 				return function(property)
 					if indexCache[self][property] then
 						indexCache[self][property] = nil
@@ -156,6 +157,32 @@
 						print(('[hook] %s.%s unlocked.'):format(tostring(self), tostring(property)))	
 					else
 						print(('[hook] %s.%s is not locked.'):format(tostring(self), tostring(property)))
+					end
+				end
+			end
+			
+			-- rhook
+			if fn == 'rhook' then
+				return function(name, callback)
+					if not remoteCache[self] then remoteCache[self] = {} end
+				
+					if remoteCache[self][name] then
+						print(('[hook] %s is already hooked.'):format(tostring(name)))
+					else
+						remoteCache[self][name] = { self, name, callback }
+						print(('[hook] %s hooked.'):format(tostring(name)))
+					end
+				end
+			end
+			
+			-- unrhook
+			if fn == 'unrhook' then
+				return function(name)
+					if remoteCache[self][name] then
+						remoteCache[self][name] = nil
+						print(('[hook] %s unhooked.'):format(tostring(name)))
+					else
+						print(('[hook] %s is not hooked.'):format(tostring(name)))
 					end
 				end
 			end
@@ -205,12 +232,25 @@
 	
 	
 	
-	--// hook __namecall to add .hook, .unhook, and .fire to RemoteEvents \\--
+	--// hook __namecall to add .hook and .unhook to RemoteEvents \\--
 	local oNamecall
 	oNamecall = hookmetamethod(game, '__namecall', function(self, key, ...)
+		local args = {...}
+		local method = getnamecallmethod()
 		
+		if method == 'FireServer' or method == 'InvokeServer' then
+			local selfHook = remoteCache[self]  or nil
+			if selfHook and type(selfHook) == 'table' then
+				local hook = selfHook[self.Name]
+				if hook and hook[1] and hook[2] and hook[3] then
+					if type(hook[2]) == 'string' and hook[2] == self.Name then
+						hook[3](args)
+					end
+				end
+			end
+		end
 		
-		return oNamecall(self, key, ...)
+		return oNamecall(self, key, unpack(args))
 	end)
 	
 	print('[hook] hooks initialized.')
