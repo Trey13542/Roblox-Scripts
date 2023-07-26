@@ -6,16 +6,16 @@
 
 --< define stuff >--
 
-local map = 'Desert Temple'
-local difficulty = 'Easy'
-local hardcore = true
+--local map = 'Desert Temple'
+--local difficulty = 'Easy'
+--local hardcore = true
 
 
 --< host/join lobby >--
 
 if game:GetService('Players').LocalPlayer.Name == _G.host then
 	-- start lobby
-    game:GetService('ReplicatedStorage').remotes.createLobby:InvokeServer(map, difficulty, 0, hardcore, true, false)
+    game:GetService('ReplicatedStorage').remotes.createLobby:InvokeServer(_G.map, _G.difficulty, 0, _G.hardcore, true, false)
     
     -- whilelist others
     for _,v in pairs(_G.joining) do
