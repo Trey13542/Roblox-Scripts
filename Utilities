@@ -2,6 +2,10 @@
 	docs: https://treythehot.gitbook.io
 	github: https://github.com/Trey13542
 --]]
+if not hookmetamethod or not checkcaller or not hookfunction or not getnamecallmethod then
+	print('exploit not supported')
+	return
+end
 
 
 
@@ -76,19 +80,7 @@
 
 
 
---< hooking utility >--
-	
-	--// documentation \\--
-	
-	--[[ 
-		Instance.hook('Property', 'Value')				- makes the 'Property' show as 'Value'
-		Instance.hook('Property', 'Value', function)
-		Instance.unhook('Property')						- makes the 'Property' show as the normal value
-		
-		Instance.
-	--]]
-	
-	
+--< hooking >--
 	
 	--// define stuff \\--
 	if _G.hooks_init then return end
@@ -109,7 +101,7 @@
 		if checkcaller() then
 			local fn = tostring(key) and string.lower(tostring(key)) or ''
 			
-			-- .hook and .sethook
+			-- .hook
 			if fn == 'hook' then
 				return function(property, value, callback)
 					if not indexCache[self] then indexCache[self] = {} end
@@ -123,7 +115,7 @@
 				end
 			end
 			
-			-- .unhook and .removehook
+			-- .unhook
 			if fn == 'unhook' then
 				return function(property)
 					if indexCache[self][property] then
@@ -131,6 +123,32 @@
 						print(('[hook] %s.%s unhooked.'):format(tostring(self), tostring(property)))
 					else 
 						print(('[hook] %s.%s is not hooked.'):format(tostring(self), tostring(property)))
+					end
+				end
+			end
+			
+			-- rhook
+			if fn == 'rhook' then
+				return function(name, callback)
+					if not remoteCache[self] then remoteCache[self] = {} end
+				
+					if remoteCache[self][name] then
+						print(('[hook] %s is already hooked.'):format(tostring(name)))
+					else
+						remoteCache[self][name] = { self, name, callback }
+						print(('[hook] %s hooked.'):format(tostring(name)))
+					end
+				end
+			end
+			
+			-- unrhook
+			if fn == 'unrhook' then
+				return function(name)
+					if remoteCache[self][name] then
+						remoteCache[self][name] = nil
+						print(('[hook] %s unhooked.'):format(tostring(name)))
+					else
+						print(('[hook] %s is not hooked.'):format(tostring(name)))
 					end
 				end
 			end
@@ -161,28 +179,26 @@
 				end
 			end
 			
-			-- rhook
-			if fn == 'rhook' then
-				return function(name, callback)
-					if not remoteCache[self] then remoteCache[self] = {} end
-				
-					if remoteCache[self][name] then
-						print(('[hook] %s is already hooked.'):format(tostring(name)))
+			-- .protect
+			if fn == 'protect' then
+				return function()
+					if _G.protected[self] then
+						print(('[protect] %s is already protected.'):format(tostring(self)))
 					else
-						remoteCache[self][name] = { self, name, callback }
-						print(('[hook] %s hooked.'):format(tostring(name)))
+						table.insert(_G.protected, self)
+						print(('[protect] %s protected.'):format(tostring(self)))
 					end
 				end
 			end
 			
-			-- unrhook
-			if fn == 'unrhook' then
-				return function(name)
-					if remoteCache[self][name] then
-						remoteCache[self][name] = nil
-						print(('[hook] %s unhooked.'):format(tostring(name)))
+			-- .unprotect
+			if fn == 'unprotect' then
+				return function()
+					if _G.protected[self] then
+						table.remove(_G.protected, table.find(_G.protected, self))
+						print(('[protect] %s unprotected.'):format(tostring(self)))
 					else
-						print(('[hook] %s is not hooked.'):format(tostring(name)))
+						print(('[protect] %s is not protected.'):format(tostring(self)))
 					end
 				end
 			end
