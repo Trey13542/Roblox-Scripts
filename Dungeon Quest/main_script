@@ -8,21 +8,24 @@ if not hookmetamethod or not checkcaller or not getnamecallmethod then
 	return
 end
 
+if _G.penis then return end
+_G.penis = true
+
 
 --< define stuff >--
 
-_G.host = 'TreyTheHot1'
-_G.joining = { 'AwesomeSauce12126' }
+_G.host = ''
+_G.joining = { '' }
 
-_G.damage = 'TreyTheHot1'
-_G.support = 'AwesomeSauce12126'
+_G.damage = ''
+_G.support = ''
 
 
 --< check game >--
 
 local lobby_ids = { 2414851778, 3220968688 }
 if table.find(lobby_ids, game.PlaceId) then
-	-- do lobby stuff
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/lobby_script'))()
 else
-	-- do game stuff
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/game_script'))()
 end
