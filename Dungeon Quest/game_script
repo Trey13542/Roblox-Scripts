@@ -12,7 +12,7 @@ if not _G.ws then return end
 
 --< Damage >--
 
-if _G.lPlr.Name == damage then
+if _G.lPlr.Name == _G.damage then
 	--[[while wait() do
 		for i,v in pairs(workspace:GetDescendants()) do
 		    if v:IsA('Humanoid') and not game:GetService('Players'):FindFirstChild(v.Parent.Name) then
@@ -150,7 +150,7 @@ end
 
 --< Support >--
 
-if _G.lPlr.Name == support then
+if _G.lPlr.Name == _G.support then
 	while wait() do
 		for _,v in pairs(players:GetPlayers()) do
 			if v and v ~= lPlr and v.Character and v.Character:FindFirstChild('Humanoid') and v.Character.Humanoid.Health < v.Character.Humanoid.MaxHealth then
@@ -166,14 +166,16 @@ if _G.lPlr.Name == support then
 end
 
 --< Others >--
-while wait(1) do
-	local dir = math.random(1, 4)
-	local pos = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.Position
-	
-	if dir == 1 then pos += Vector3.new(1, 0, 0)
-	elseif dir == 2 then pos += Vector3.new(-1, 0, 0)
-	elseif dir == 3 then pos += Vector3.new(0, 0, 1)
-	elseif dir == 4 then pos += Vector3.new(0, 0, -1) end
-	
-	game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.Position = pos
+if table.find(_G.joining, _G.lPlr.Name) then
+	while wait(1) do
+		local dir = math.random(1, 4)
+		local pos = game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.Position
+		
+		if dir == 1 then pos += Vector3.new(1, 0, 0)
+		elseif dir == 2 then pos += Vector3.new(-1, 0, 0)
+		elseif dir == 3 then pos += Vector3.new(0, 0, 1)
+		elseif dir == 4 then pos += Vector3.new(0, 0, -1) end
+		
+		game:GetService('Players').LocalPlayer.Character.HumanoidRootPart.CFrame.Position = pos
+	end
 end
