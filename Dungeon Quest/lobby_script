@@ -29,8 +29,8 @@ if game:GetService('Players').LocalPlayer.Name == _G.host then
     game:GetService('ReplicatedStorage').remotes.startDungeon:FireServer()
 else
 	-- wait until lobby created
-	repeat wait() until game:GetService('Players').LocalPlayer.PlayerGui.queueGui.gameSearch.backgroundFill.ScrollingFrame:FindFirstChild(host)
+	repeat wait() until game:GetService('Players').LocalPlayer.PlayerGui.queueGui.gameSearch.backgroundFill.ScrollingFrame:FindFirstChild(_G.host)
 	
 	-- join lobby
-	game:GetService('ReplicatedStorage').remotes.joinDungeon:InvokeServer(host)
+	game:GetService('ReplicatedStorage').remotes.joinDungeon:InvokeServer(_G.host)
 end
