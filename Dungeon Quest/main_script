@@ -14,11 +14,11 @@ _G.penis = true
 
 --< define stuff >--
 
-_G.host = ''
-_G.joining = { '' }
+--_G.host = ''
+--_G.joining = { '' }
 
-_G.damage = ''
-_G.support = ''
+--_G.damage = ''
+--_G.support = ''
 
 
 --< check game >--
