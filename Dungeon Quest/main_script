@@ -13,7 +13,7 @@ assert(_G.map and _G.difficulty and _G.hardcore, 'have to define map, difficulty
 
 local lobby_ids = { 2414851778, 3220968688 }
 if table.find(lobby_ids, game.PlaceId) then
-	loadstring(game:HttpGet('https://github.com/Trey13542/Roblox-Scripts/blob/main/Dungeon%20Quest/lobby_script'))()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/lobby_script'))()
 else
-	loadstring(game:HttpGet('https://github.com/Trey13542/Roblox-Scripts/blob/main/Dungeon%20Quest/game_script'))()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/game_script'))()
 end
