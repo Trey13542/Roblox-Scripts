@@ -3,29 +3,17 @@
 	github: https://github.com/Trey13542
 --]]
 
-if not hookmetamethod or not checkcaller or not getnamecallmethod then
-	print('exploit not supported')
-	return
-end
+assert(hookmetamethod and checkcaller and getnamecallmethod, 'exploit not supported')
+assert(_G.host, 'have to define host')
+assert(_G.map and _G.difficulty and _G.hardcore, 'have to define map, difficulty, and hardcore')
 
-if _G.penis then return end
-_G.penis = true
-
-
---< define stuff >--
-
---_G.host = ''
---_G.joining = { '' }
-
---_G.damage = ''
---_G.support = ''
 
 
 --< check game >--
 
 local lobby_ids = { 2414851778, 3220968688 }
 if table.find(lobby_ids, game.PlaceId) then
-	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/lobby_script'))()
+	loadstring(game:HttpGet('https://github.com/Trey13542/Roblox-Scripts/blob/main/Dungeon%20Quest/lobby_script'))()
 else
-	loadstring(game:HttpGet('https://raw.githubusercontent.com/Trey13542/Roblox-Scripts/main/Dungeon%20Quest/game_script'))()
+	loadstring(game:HttpGet('https://github.com/Trey13542/Roblox-Scripts/blob/main/Dungeon%20Quest/game_script'))()
 end
