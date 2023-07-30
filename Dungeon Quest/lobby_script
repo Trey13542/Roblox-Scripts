@@ -16,7 +16,7 @@ if lPlr.PlayerGui:FindFirstChild('introGui') then
 	for _,v in pairs(getconnections(lPlr.PlayerGui.introGui.title.Frame.TextButton.MouseButton1Click)) do
 		v:Fire()
 	end
-	repeat wait() until lPlr.Character
+	wait(5)
 end
 
 
