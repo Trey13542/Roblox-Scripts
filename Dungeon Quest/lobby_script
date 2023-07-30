@@ -4,13 +4,6 @@
 --]]
 
 
---< define stuff >--
-
---local map = 'Desert Temple'
---local difficulty = 'Easy'
---local hardcore = true
-
-
 --< host/join lobby >--
 
 if game:GetService('Players').LocalPlayer.Name == _G.host then
