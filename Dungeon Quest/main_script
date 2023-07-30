@@ -4,6 +4,7 @@
 --]]
 
 repeat wait() until game:IsLoaded()
+wait(5)
 assert(hookmetamethod and checkcaller and getnamecallmethod, 'exploit not supported')
 assert(_G.host, 'have to define host')
 assert(_G.map and _G.difficulty and _G.hardcore, 'have to define map, difficulty, and hardcore')
