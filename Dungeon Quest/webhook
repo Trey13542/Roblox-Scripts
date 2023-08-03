@@ -36,8 +36,8 @@ function validTime(time)
 	local seconds	= math.round(time - minutes * 60)
 	local str = ''
 	
-	if minutes < 10 then str = '0' .. minutes .. ':' .. seconds
-	elseif minutes >= 10 then str = minutes .. ':' .. seconds end
+	str = (minutes < 10) and str .. '0' .. minutes .. ':' or str .. minutes .. ':'
+	str = (seconds < 10) and str .. '0' .. seconds or str .. seconds
 	
 	return { minutes, seconds, str }
 end
