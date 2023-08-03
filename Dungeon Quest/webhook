@@ -57,7 +57,7 @@ function addItem(item)
 		local name = prefix[item.rarity] .. item.name .. class
 		if item.rarity == 'epic' then
 			for _,v in pairs(_G.collectables) do
-				if string.find(item.name, _) then
+				if string.sub(item.name, 1, #_) == _ then
 					name = name .. ' (COLLECT)'
 				end
 			end
