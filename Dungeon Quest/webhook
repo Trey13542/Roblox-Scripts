@@ -1,163 +1,35 @@
 repeat wait() until game:IsLoaded() and workspace.dungeonProgress.Value == 'inProgress'
-print('hi')
+
 
 --< defines >--
 
-local webhook = ''
-
 local reload = game:GetService('ReplicatedStorage').remotes.reloadInvy
 
+local lPlr = game.Players.LocalPlayer
+local status = lPlr.PlayerGui.playerStatus.Frame
+local stats = { ['level'] = '?', ['gold'] = '?', ['xp'] = '?', ['name'] = '?'}
 
+if not _G.settings.hideStats then
+	stats['level']	= lPlr.leaderstats.Level.Value
+	stats['gold']	= status.moneyMain.TextLabel.Text
+	stats['xp']		= '(' .. status.xpFrame.xp.Text .. ')'
+end
+if not _G.settings.hideName then
+	stats['name']	= lPlr.Name
+end
 
---< tables >--
-
-local colors = {
-	['common'] 		= 	tonumber(0x989898),
-	['uncommon'] 	= 	tonumber(0x39FF14),
-	['rare']		= 	tonumber(0x0099FF),
-	['epic']		=	tonumber(0xBC13FE),
-	['legendary']	=	tonumber(0xf49a09),
-	['mythical']	=	tonumber(0xFF0000),
+local loot = {}
+local prefix = {
+	['common'] 		= ':white_circle: ',
+	['uncommon']	= ':green_circle: ',
+	['rare']		= ':blue_circle: ',
+	['epic']		= ':purple_circle: ',
+	['legendary']	= ':yellow_circle: ',
+	['mythical']	= ':red_circle: ',
 }
-local collectables = {
-	-- Desert Temple --
-	['Red Knight Helmet'] 	= true, ['Red Knight Armor'] 	= true,  		-- Warrior
-	['Templar Hood'] 		= true, ['Templar Robes'] 		= true, 		-- Mage
-	['Guardian Helmet'] 	= true, ['Guardian Armor'] 		= true,			-- Guardian
-	
-	-- Winter Outpost --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Pirate Island --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- King's Castle --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- The Underworld --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Samurai Palace --
-	['Ancestral Warrior Helmet'] 	= true, ['Ancestral Warrior Armor'] = true,  -- Warrior
-	['Ancestral Mage Hood'] 		= true, ['Ancestral Mage Armor'] = true, 	 -- Mage
-	['Ancestral Guardian Helmet'] 	= true, ['Ancestral Guardian Armor'] = true, -- Guardian
-	
-	-- The Canals --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Ghastly Harbor --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Steampunk Sewers --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Orbital Outpost --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Volcanic Chambers --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Aquatic Temple --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Enchanted Forest --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Northern Lands --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-	
-	-- Gilded Skies --
-	 -- Warrior
-	 -- Mage
-	 -- Guardian
-}
-
 
 
 --< functions >--
-
-function addBase(t, c) return { ['title'] = t, ['color'] = c } end
-function addField(n, v) return { ['name'] = n, ['value'] = v } end
-function addWeapon(item)
-	local pDamage 	= item.physicalDamage
-	local sDamage 	= item.spellPower
-	local upgrades 	= item.maxUpgrades
-	
-	local str = (pDamage > sDamage) and ' [Warrior]' or ' [Mage]'
-	
-	local data 		= addBase(item.name .. str, colors[item.rarity])
-	data['fields'] 	= {
-		addField('Physical Damage:', pDamage .. ' (Pot = ' .. pDamage + (upgrades * 10) .. ')'),
-		addField('Spell Power:', sDamage .. ' (Pot = ' .. sDamage + (upgrades * 10) .. ')'),
-		addField('Required Level:', item.levelReq),
-		addField('Upgrades:', item.maxUpgrades),
-		addField('Sell Price:', item.sellPrice)
-	}
-	
-	return data
-end
-function addArmor(item)
-	local pDamage 	= item.physicalPower
-	local sDamage 	= item.spellPower
-	local health 	= item.health
-	local upgrades 	= item.maxUpgrades
-	
-	local str = (pDamage > sDamage) and ' [Warrior]' or ' [Mage]'
-	if string.find(item.name, 'Guardian') then str = ' [Guardian]' end
-	
-	local data 		= addBase(item.name .. str, colors[item.rarity])
-	data['fields'] 	= {
-		addField('Physical Damage:', pDamage .. ' (Pot = ' .. pDamage + (upgrades * 10) .. ')'),
-		addField('Spell Power:', sDamage .. ' (Pot = ' .. sDamage + (upgrades * 10) .. ')'),
-		addField('Health:', health .. ' (Pot = ' .. health + (upgrades * 10) .. ')'),
-		addField('Required Level:', item.levelReq),
-		addField('Upgrades:', item.maxUpgrades),
-		addField('Sell Price:', item.sellPrice),
-	}
-	if item.rarity == 'epic' and collectables[item.name] then
-		table.insert(data['fields'], addField('COLLECTABLE', 'THIS ITEM IS A COLLECTABLE'))
-	end
-	
-	return data
-end
-function addSpell(item)
-	local str = ''
-	if string.find(item.description, 'Tank') then str = ' [Tank]'
-	elseif string.find(item.description, 'spell') or string.find(item.description, 'Mage') then str = ' [Mage]'
-	elseif string.find(item.description, 'physical') then str = ' [Warrior]' end
-	
-	local data = addBase(item.name .. str, colors[item.rarity])
-	data['fields'] = {
-		addField('Required Level:', item.levelReq),
-		addField('Sell Price:', item.sellPrice)
-	}
-	
-	return data
-end
 
 function validTime(time)
 	local minutes 	= math.round((time - time % 60) / 60)
@@ -169,61 +41,79 @@ function validTime(time)
 	
 	return { minutes, seconds, str }
 end
-function getItemTable(t, i)
-	local inv2 = reload:InvokeServer()
-	local iTable = inv2[t ~= 'ability' and t .. 's' or 'abilities'][t .. '_' .. i]
-	
-	if iTable['physicalDamage'] then return { ['func'] = addWeapon, ['item'] = iTable }
-	elseif iTable['physicalPower'] then return { ['func'] = addArmor, ['item'] = iTable }
-	else return { ['func'] = addSpell, ['item'] = iTable } end
-end
 
-function logItems(items)
-	local data = {
+function getItemTable(t, i)
+	local inv = reload:InvokeServer()
+	return inv[t ~= 'ability' and t .. 's' or 'abilities'][t .. '_' .. i]
+end
+function addItem(item)
+	if item.physicalDamage or item.physicalPower then
+		local weapon 	= item.physicalDamage
+		local phy		= weapon and item.physicalDamage or item.physicalPower
+		local spe		= item.spellPower
+	
+		local class 	= (item.physicalDamage > item.spellPower) and 'Warrior' or 'Mage'
+		
+		local name = prefix[item.rarity] .. item.name
+		if _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
+		
+		local value
+		if weapon then
+			if class == 'Warrior' then value = '```Physical Damage: ' .. phy .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
+			else value = '```Spell Power: ' .. spe .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```' end
+		else
+			if class == 'Warrior' then value = '```Physical Damage: ' .. phy .. '\nHealth: ' .. item.health .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
+			else value = '```Spell Power: ' .. spe .. '\nHealth: ' .. item.health .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```' end
+		end
+		
+		table.insert(loot, { ['name'] = name, ['value'] = value })
+	else
+		print('oof')
+		print(item.levelReqq)
+	end
+end
+function doRequest()
+	local msg = {
 		['embeds'] = {
 			{
-				['title'] 	= 'Ez Quest Item Notifier',
-				['color']	= tonumber(0x000000),
-				['fields']	= {
-					{
-						['name'] 	= 'Dungeon:',
-						['value'] 	= game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name
-					},
-					{
-						['name']	= 'Clear Time:',
-						['value']	= validTime(os.time() - workspace.start.startTime.Value)[3]
-					}
-				}
-			},
+				['title']		= 'Ez Quest | ' .. game:GetService('MarketplaceService'):GetProductInfo(game.PlaceId).Name .. ' | ' .. validTime(os.time() - workspace.start.startTime.Value)[3],
+				['color'] 		= 8421504,
+				['fields']		= {
+					loot[1],
+					loot[2],
+					loot[3]
+				},
+				['footer'] 		= {
+					['text'] = '⭐ LVL: ' .. stats['level'] .. ' | EXP: ' .. stats['xp'] .. ' | Gold: ' .. stats['gold'] .. ' ⭐\n'
+					.. stats['name']
+				},
+				['timestamp']	= DateTime.now():ToIsoDate()
+			}
 		}
 	}
-	for _,v in pairs(items) do
-		table.insert(data['embeds'], v['func'](v['item']))
-	end
-
+	
 	request({
-		Url 	= _G.webhook,
-		Method 	= 'POST',
+		Url = _G.settings.webhook,
+		Method = 'POST',
 		Headers = { ['content-type'] = 'application/json' },
-		Body 	= game:GetService('HttpService'):JSONEncode(data)
+		Body = game:GetService('HttpService'):JSONEncode(msg)
 	})
 end
 
 
+--< main >--
 
---< Main >--
-
-local items = {}
 local num = 1
 if workspace.hardcore.Value == true then num += 1 end
+if lPlr.extraItemGamepass.Value == true then num += 1 end
 
-game.Players.LocalPlayer.PlayerGui:WaitForChild('inventory').mainBackground.innerBackground.rightSideFrame.ScrollingFrame.ChildAdded:Connect(function(c)
+lPlr.PlayerGui:WaitForChild('inventory').mainBackground.innerBackground.rightSideFrame.ScrollingFrame.ChildAdded:Connect(function(c)
 	local type 	= c:WaitForChild('itemType')
 	local id 	= type:WaitForChild('uniqueItemNum')
 	local tab	= getItemTable(type.Value, id.Value)
 	
-	table.insert(items, tab)
-	if #items == num then
-		logItems(items) 
+	addItem(tab)
+	if #loot == num then
+		doRequest()
 	end
 end)
