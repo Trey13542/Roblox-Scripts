@@ -58,7 +58,7 @@ function addItem(item)
 		if item.rarity == 'epic' then
 			for _,v in pairs(_G.collectables) do
 				if string.find(item.name, _) then
-					name = name .. ' (COLLECTABLE)'
+					name = name .. ' (COLLECT)'
 				end
 			end
 		end
