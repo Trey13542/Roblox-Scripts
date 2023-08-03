@@ -58,8 +58,8 @@ function addItem(item)
 		if _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
 		
 		local value
-		local s = item.physicalDamage and 'Physical Damage: ' or 'Physical Power: '
-		value = s .. phy .. '\nSpell Power: ' .. spe .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
+		local s = weapon and 'Physical Damage: ' or 'Physical Power: '
+		value = '```' .. s .. phy .. '\nSpell Power: ' .. spe .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
 		
 		table.insert(loot, { ['name'] = name, ['value'] = value })
 	else
