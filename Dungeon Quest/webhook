@@ -52,19 +52,14 @@ function addItem(item)
 		local phy		= weapon and item.physicalDamage or item.physicalPower
 		local spe		= item.spellPower
 	
-		local class 	= (phy > spe) and 'Warrior' or 'Mage'
+		local class 	= (phy > spe) and ' [Warrior]' or ' [Mage]'
 		
-		local name = prefix[item.rarity] .. item.name
+		local name = prefix[item.rarity] .. item.name .. class
 		if _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
 		
 		local value
-		if weapon then
-			if class == 'Warrior' then value = '```Physical Damage: ' .. phy .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
-			else value = '```Spell Power: ' .. spe .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```' end
-		else
-			if class == 'Warrior' then value = '```Physical Damage: ' .. phy .. '\nHealth: ' .. item.health .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
-			else value = '```Spell Power: ' .. spe .. '\nHealth: ' .. item.health .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```' end
-		end
+		local s = item.physicalDamage and 'Physical Damage: ' or 'Physical Power: '
+		value = s .. phy .. '\nSpell Power: ' .. spe .. '\nRequired Level: ' .. item.levelReq .. '\nUpgrades: ' .. item.maxUpgrades .. '```'
 		
 		table.insert(loot, { ['name'] = name, ['value'] = value })
 	else
