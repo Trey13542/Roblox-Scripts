@@ -52,7 +52,7 @@ function addItem(item)
 		local phy		= weapon and item.physicalDamage or item.physicalPower
 		local spe		= item.spellPower
 	
-		local class 	= (item.physicalDamage > item.spellPower) and 'Warrior' or 'Mage'
+		local class 	= (phy > spe) and 'Warrior' or 'Mage'
 		
 		local name = prefix[item.rarity] .. item.name
 		if _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
@@ -68,8 +68,11 @@ function addItem(item)
 		
 		table.insert(loot, { ['name'] = name, ['value'] = value })
 	else
-		print('oof')
-		print(item.levelReqq)
+		if string.find(item.name, 'Mage') or string.find(item.name, 'Spell') then
+			table.insert(loot, { ['name'] = prefix[item.rarity] .. item.name .. ' [Mage]', ['value'] = '```Required Level: ' .. item.levelReq .. '```' })
+		else
+			table.insert(loot, { ['name'] = prefix[item.rarity] .. item.name .. ' [Warrior]', ['value'] = '```Required Level: ' .. item.levelReq .. '```' })
+		end
 	end
 end
 function doRequest()
