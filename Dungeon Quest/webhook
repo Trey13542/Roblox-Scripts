@@ -55,7 +55,7 @@ function addItem(item)
 		local class 	= (phy > spe) and ' [Warrior]' or ' [Mage]'
 		
 		local name = prefix[item.rarity] .. item.name .. class
-		if _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
+		if item.rarity == 'epic' and _G.collectables[item.name] then name = name .. ' (COLLECTABLE)' end
 		
 		local value
 		local s = weapon and 'Physical Damage: ' or 'Physical Power: '
