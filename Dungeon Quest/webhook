@@ -110,23 +110,14 @@ end
 local num = 1
 if workspace.hardcore.Value == true then num += 1 end
 if lPlr.extraItemGamepass.Value == true then num += 1 end
-print('[ez] num: ' .. num)
 
 lPlr.PlayerGui:WaitForChild('inventory').mainBackground.innerBackground.rightSideFrame.ScrollingFrame.ChildAdded:Connect(function(c)
-	print('[ez] hello')
 	local type 	= c:WaitForChild('itemType')
 	local id 	= type:WaitForChild('uniqueItemNum')
 	local tab	= getItemTable(type.Value, id.Value)
 	
 	addItem(tab)
-	print('[ez] added item | #loot: ' .. #loot)
 	if #loot == num then
-		game.StarterGui:SetCore('SendNotification', { 
-			Title = '[Ez Quest Item Notifier]',
-			Text = 'Sending Request',
-			Duration = 2,
-		})
-		print('[ez] sending requestt')
 		doRequest()
 	end
 end)
