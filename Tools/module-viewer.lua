@@ -3,6 +3,8 @@
 	github: https://github.com/Trey13542
 --]]
 
+assert(getsenv and hookfunction, 'exploit not supported')
+
 --< Create Elements >--
 local ModuleViewer = Instance.new("ScreenGui")
 
