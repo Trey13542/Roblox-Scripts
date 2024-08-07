@@ -3,6 +3,8 @@
 	github: https://github.com/Trey13542
 --]]
 
+assert(getnamecallmethod, 'exploit not supported')
+
 --< Create Elements >--
 local RemoteFrameBG = Instance.new("Frame")
 local Remotes = Instance.new("ScrollingFrame")
