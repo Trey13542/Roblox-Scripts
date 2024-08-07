@@ -1,7 +1,7 @@
 --[[
 	author: treythehot
 	github: https://github.com/Trey13542
-	docs: https://treythehot.gitbook.io
+	docs: treythehot.gitbook.io/utilities
 --]]
 
 assert(hookmetamethod and checkcaller and hookfunction and getnamecallmethod, 'exploit not supported')
