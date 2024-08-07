@@ -1,13 +1,10 @@
 --[[
 	author: treythehot
 	github: https://github.com/Trey13542
-	docs: https://treythehot.gitbook.io/utilities
+	docs: https://treythehot.gitbook.io
 --]]
 
-if not hookmetamethod or not checkcaller or not hookfunction or not getnamecallmethod then
-	print('exploit not supported')
-	return
-end
+assert(hookmetamethod and checkcaller and hookfunction and getnamecallmethod, 'exploit not supported')
 
 if _G.hInit then return end
 _G.hInit = true
