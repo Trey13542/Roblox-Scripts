@@ -1,7 +1,7 @@
 --[[
 	author: treythehot
 	github: https://github.com/Trey13542
-	docs: https://treythehot.gitbook.io
+	docs: https://treythehot.gitbook.io/utilities
 --]]
 
 if not hookmetamethod or not checkcaller or not hookfunction or not getnamecallmethod then
