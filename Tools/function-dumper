@@ -3,6 +3,8 @@
 	github: https://github.com/Trey13542
 --]]
 
+assert(getsenv, 'exploit not supported')
+
 local places_to_look = {
 	game:GetService('ReplicatedStorage').Modules.Client.Systems
 }
