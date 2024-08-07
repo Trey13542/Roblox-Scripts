@@ -12,7 +12,7 @@ assert(writefile and readfile, 'exploit not supported')
 function saveConfig(name, config)
 	writefile(name, game:GetService('HttpService'):JSONEncode(config))
 end
-function loadConfig(name, config)
+function loadConfig(name)
 	local content = ''
 	pcall(function() content = game:GetService('HttpService'):JSONDecode(readfile(name)) end)
 	return content or ''
